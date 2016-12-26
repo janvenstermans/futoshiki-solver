@@ -17,7 +17,7 @@ public class PermutationSquareValueFactory {
         }
         List<IntegerPermutationSquareValue> permutationSquareValueList = new ArrayList<>();
         for (int i = 0; i < dimension; i++) {
-            permutationSquareValueList.add(createIntegerPermutationSquareValue(i));
+            permutationSquareValueList.add(createIntegerPermutationSquareValue(i + 1));
         }
         return permutationSquareValueList;
     }

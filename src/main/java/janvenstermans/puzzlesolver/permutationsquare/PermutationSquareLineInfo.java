@@ -1,9 +1,6 @@
 package janvenstermans.puzzlesolver.permutationsquare;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Info of a line, i.e. row or column.
@@ -41,11 +38,17 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
                 impactChanges.add(cellInfo);
             }
         }
-        List<PermutationSquareCellInfo<PermutationSquareValue>> newChanges = new ArrayList<>();
-        if (!impactChanges.isEmpty()) {
-
+        if (impactChanges.isEmpty()) {
+            return Collections.<PermutationSquareCellInfo<PermutationSquareValue>>emptyList();
         }
-        return newChanges;
+        for (PermutationSquareCellInfo<PermutationSquareValue> impactChange : impactChanges) {
+            possibleValueMap.remove(impactChange.getValue());
+        }
+        List<Integer> filledIndices = getFilledIndices();
+        for (Map.Entry<PermutationSquareValue, List<Integer>> entry : possibleValueMap.entrySet()) {
+            entry.getValue().removeAll(filledIndices);
+        }
+        return extractNewChanges();
     }
 
     private List<Integer> createIndexList(int count) {
@@ -64,5 +67,49 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
                 return cellInfo.getRowIndex() == index;
         }
         return false;
+    }
+
+    private List<Integer> getFilledIndices() {
+        List<Integer> filledIndices = new ArrayList<>();
+        for (PermutationSquareCellInfo<PermutationSquareValue> cellInfo : cellArray) {
+            if (cellInfo.getValue() != null) {
+                filledIndices.add(getCellIndex(cellInfo));
+            }
+        }
+        return filledIndices;
+    }
+
+    private List<PermutationSquareCellInfo<PermutationSquareValue>> extractNewChanges() {
+        List<PermutationSquareCellInfo<PermutationSquareValue>> newChanges = new ArrayList<>();
+        // single values
+        for (Map.Entry<PermutationSquareValue, List<Integer>> entry : possibleValueMap.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                PermutationSquareCellInfo<PermutationSquareValue> cellInfo
+                        = createPermutationSquareCellInfo(entry.getValue().get(0));
+                cellInfo.setValue(entry.getKey());
+                newChanges.add(cellInfo);
+        }
+        }
+        return newChanges;
+    }
+
+    private PermutationSquareCellInfo<PermutationSquareValue> createPermutationSquareCellInfo(int cellIndex) {
+        switch (lineType) {
+            case ROW:
+                return new PermutationSquareCellInfo<PermutationSquareValue>(cellIndex, index);
+            case COLUMN:
+                return new PermutationSquareCellInfo<PermutationSquareValue>(index, cellIndex);
+        }
+        return null;
+    }
+
+    private int getCellIndex(PermutationSquareCellInfo<PermutationSquareValue> cellInfo) {
+        switch (lineType) {
+            case ROW:
+                return cellInfo.getColumnIndex();
+            case COLUMN:
+                return cellInfo.getRowIndex();
+        }
+        return -1;
     }
 }

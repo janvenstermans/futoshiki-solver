@@ -18,7 +18,7 @@ public class PermutationSquareImplDim2Test {
         PermutationSquare<IntegerPermutationSquareValue> permutationSquare
                 = new PermutationSquareImpl<IntegerPermutationSquareValue>(PermutationSquareValueFactory.createIntegerList(2));
 
-        List<PermutationSquareCellInfo> changeInfoList = new ArrayList<>();
+        List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList = new ArrayList<>();
         changeInfoList.add(new PermutationSquareCellInfo(0,0, PermutationSquareValueFactory.createIntegerPermutationSquareValue(1)));
 
         permutationSquare.changeValues(changeInfoList);
