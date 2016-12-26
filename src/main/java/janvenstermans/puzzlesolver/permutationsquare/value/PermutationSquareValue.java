@@ -1,4 +1,4 @@
-package janvenstermans.puzzlesolver.permutationsquare;
+package janvenstermans.puzzlesolver.permutationsquare.value;
 
 /**
  * @author Jan Venstermans

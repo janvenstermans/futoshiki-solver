@@ -11,8 +11,12 @@ public class PermutationSquareCellInfo<PermutationSquareValue>  {
     private PermutationSquareValue value;
 
     public PermutationSquareCellInfo(int columnIndex, int rowIndex) {
+        this(columnIndex, rowIndex, null);
+    }
+    public PermutationSquareCellInfo(int columnIndex, int rowIndex, PermutationSquareValue value) {
         this.columnIndex = columnIndex;
         this.rowIndex = rowIndex;
+        setValue(value);
     }
 
     public int getColumnIndex() {
@@ -29,10 +33,19 @@ public class PermutationSquareCellInfo<PermutationSquareValue>  {
      * @return has a new value been set?
      */
     public boolean setValue(PermutationSquareValue value) {
+        boolean isValue = value != null;
         if (this.value == null) {
-            this.value = value;
-            return true;
-        } else if (this.value.equals(value)) {
+            if (!isValue) {
+                return false;
+            } else {
+                this.value = value;
+                return true;
+            }
+        }
+        if (!isValue) {
+            throw new IllegalArgumentException(String.format("Value %s cannot set to null.", this.value, value));
+        }
+        if (!this.value.equals(value)) {
             throw new IllegalArgumentException(String.format("Value %s cannot be overwritten to %s", this.value, value));
         }
         return false;

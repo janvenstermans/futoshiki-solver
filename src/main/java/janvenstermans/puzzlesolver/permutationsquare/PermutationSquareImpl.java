@@ -14,6 +14,8 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
     private final PermutationSquareLineInfo[] columnArray;
     private final PermutationSquareLineInfo[] rowArray;
 
+    private List<PermutationSquareValueChangedListener<PermutationSquareValue>> valueChangedListenerList = new ArrayList<>();
+
     public PermutationSquareImpl(List<PermutationSquareValue> possibleValueList) {
         if (possibleValueList == null || possibleValueList.size() < 1) {
             throw new IllegalArgumentException("possibleValueList must be non empty string");
@@ -26,6 +28,7 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
                 valueContainersArray[i][j] = new PermutationSquareCellInfo<PermutationSquareValue>(i, j);
             }
         }
+
         // columns
         columnArray = new PermutationSquareLineInfo[getPossibleValueCount()];
         for (int i = 0; i < getPossibleValueCount(); i++) {
@@ -36,25 +39,39 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
         for (int i = 0; i < getPossibleValueCount(); i++) {
             rowArray[i] = new PermutationSquareLineInfo(i, LineType.ROW, createRow(i), possibleValueList);
         }
+
+        // register column and rows
+        for (PermutationSquareLineInfo<PermutationSquareValue> column : columnArray) {
+            valueChangedListenerList.add(column);
+        }
+        for (PermutationSquareLineInfo row : rowArray) {
+            valueChangedListenerList.add(row);
+        }
     }
 
     @Override
-    public void changeValues(List<PermutationSquareCellInfo> changeInfoList) {
+    public void changeValues(List<PermutationSquareCellInfo<PermutationSquareValue>> changeInfoList) {
         // check the infoList, contain the ones that are not set yet
-        List<PermutationSquareCellInfo> infoToChangeList = new ArrayList<PermutationSquareCellInfo>();
+        List<PermutationSquareCellInfo<PermutationSquareValue>> infoToChangeList = new ArrayList<>();
         for (PermutationSquareCellInfo changeInfo : changeInfoList) {
             if (isNewValue(changeInfo)) {
                 infoToChangeList.add(changeInfo);
             }
         }
         if (infoToChangeList.size() > 0) {
-            fireValueSetEvent(infoToChangeList);
+            fireChangeToListeners(infoToChangeList);
         }
     }
 
     @Override
     public PermutationSquareValue getValue(int columnIndex, int rowIndex) {
-        return null;
+        PermutationSquareCellInfo<PermutationSquareValue> cellInfo = valueContainersArray[columnIndex][rowIndex];
+        return cellInfo.getValue();
+    }
+
+    @Override
+    public void registerValueChangedListener(PermutationSquareValueChangedListener<PermutationSquareValue> valueChangedListener) {
+        valueChangedListenerList.add(valueChangedListener);
     }
 
     // helper methods
@@ -75,8 +92,12 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
         }
     }
 
-    private void fireValueSetEvent(List<PermutationSquareCellInfo> infoToChangeList) {
-        //TODO
+    private void fireChangeToListeners(List<PermutationSquareCellInfo<PermutationSquareValue>> infoToChangeList) {
+        List<PermutationSquareCellInfo<PermutationSquareValue>> newChanges = new ArrayList<>();
+        for (PermutationSquareValueChangedListener<PermutationSquareValue> listener : valueChangedListenerList) {
+            newChanges.addAll(listener.applyChange(infoToChangeList));
+        }
+        // TODO: what to do
     }
 
     /**

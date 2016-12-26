@@ -7,7 +7,9 @@ import java.util.List;
  */
 public interface PermutationSquare<PermutationSquareValue>  {
 
-    void changeValues(List<PermutationSquareCellInfo> changeInfoList);
+    void changeValues(List<PermutationSquareCellInfo<PermutationSquareValue>> changeInfoList);
 
     PermutationSquareValue getValue(int columnIndex, int rowIndex);
+
+    void registerValueChangedListener(PermutationSquareValueChangedListener<PermutationSquareValue> valueChangedListener);
 }
