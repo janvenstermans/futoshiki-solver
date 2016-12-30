@@ -47,13 +47,19 @@ public class PermutationSquareLineInfoTestUtil {
 
     /**
      *
+     * @param lineInfo
      * @param cellArray
      * @param indexValueArray of form { {index, intValue} , ...}
      */
-    public static void setCellIntegerValues(PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray, int[][] indexValueArray) {
-        for (int i = 0; i < indexValueArray.length; i++) {
-            cellArray[indexValueArray[i][0]].setValue(PermutationSquareValueFactory.createIntegerPermutationSquareValue(indexValueArray[i][1]));
-        }
+    public static void setCellIntegerValuesForRow(PermutationSquareLineInfo lineInfo, PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray,
+                                                  int[][] indexValueArray) {
+        List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList
+                = PermutationSquareLineInfoTestUtil.createChangeInfoList(cellArray.length, indexValueArray);
+        PermutationSquareLineInfoTestUtil.copyChangeInfoToCellArray(changeInfoList, cellArray);
+        lineInfo.applyChange(changeInfoList);
+//        for (int i = 0; i < indexValueArray.length; i++) {
+//            cellArray[indexValueArray[i][0]].setValue(PermutationSquareValueFactory.createIntegerPermutationSquareValue(indexValueArray[i][1]));
+//        }
     }
 
     /**

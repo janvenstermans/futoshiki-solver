@@ -101,9 +101,9 @@ public class PermutationSquareLineInfoDim2Test {
     public void testApplyChangeForFilledLineWithKnownValueNoResultExpected() throws Exception {
         PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray
                 = PermutationSquareLineInfoTestUtil.createCellArrayForRow(DIMENSION, ROW_INDEX);
-        PermutationSquareLineInfoTestUtil.setCellIntegerValues(cellArray, new int[][] {{0,1},{1,2}});
         PermutationSquareLineInfo lineInfo = new PermutationSquareLineInfo<IntegerPermutationSquareValue>(
                 ROW_INDEX, LINE_TYPE, cellArray, PermutationSquareValueFactory.createIntegerListForDimension(DIMENSION));
+        PermutationSquareLineInfoTestUtil.setCellIntegerValuesForRow(lineInfo, cellArray, new int[][] {{0,ROW_INDEX, 1},{1,ROW_INDEX, 2}});
         List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList
                 = PermutationSquareLineInfoTestUtil.createChangeInfoList(DIMENSION, new int[][] {{0, ROW_INDEX, 1}});
         PermutationSquareLineInfoTestUtil.copyChangeInfoToCellArray(changeInfoList, cellArray);
@@ -125,9 +125,9 @@ public class PermutationSquareLineInfoDim2Test {
     public void testApplyChangeForFilledLineWithKnownValueNExpectException() throws Exception {
         PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray
                 = PermutationSquareLineInfoTestUtil.createCellArrayForRow(DIMENSION, ROW_INDEX);
-        PermutationSquareLineInfoTestUtil.setCellIntegerValues(cellArray, new int[][] {{0,1},{1,2}});
         PermutationSquareLineInfo lineInfo = new PermutationSquareLineInfo<IntegerPermutationSquareValue>(
                 ROW_INDEX, LINE_TYPE, cellArray, PermutationSquareValueFactory.createIntegerListForDimension(DIMENSION));
+        PermutationSquareLineInfoTestUtil.setCellIntegerValuesForRow(lineInfo, cellArray, new int[][]{{0,ROW_INDEX,1},{1,ROW_INDEX,2}});
         List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList
                 = PermutationSquareLineInfoTestUtil.createChangeInfoList(DIMENSION, new int[][] {{0, ROW_INDEX, 2}});
         PermutationSquareLineInfoTestUtil.copyChangeInfoToCellArray(changeInfoList, cellArray);
