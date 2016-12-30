@@ -24,7 +24,7 @@ public class PermutationSquareLineInfoDim2Test {
     private final static LineType LINE_TYPE = LineType.ROW;
 
     //--------------------------------
-    // method applyChange
+    // method applyChange for EMPTY
     //--------------------------------
 
     @Test
@@ -96,6 +96,10 @@ public class PermutationSquareLineInfoDim2Test {
         PermutationSquareLineInfoTestUtil.assertCellContainsValuesMap(cellArray, possibleValueMap);
         PermutationSquareLineInfoTestUtil.assertLineIndexValuesMap(lineInfo, indexPerValueMap);
     }
+
+    //--------------------------------
+    // method applyChange for FILLED
+    //--------------------------------
 
     @Test
     public void testApplyChangeForFilledLineWithKnownValueNoResultExpected() throws Exception {
