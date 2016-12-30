@@ -4,10 +4,11 @@ import janvenstermans.puzzlesolver.permutationsquare.value.IntegerPermutationSqu
 import janvenstermans.puzzlesolver.permutationsquare.value.PermutationSquareValue;
 import janvenstermans.puzzlesolver.permutationsquare.value.PermutationSquareValueFactory;
 import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Util for PermutationSquareLineInfoTest.
@@ -39,7 +40,7 @@ public class PermutationSquareLineInfoTestUtil {
     public static PermutationSquareCellInfo<IntegerPermutationSquareValue>[] createCellArrayForRow(int dimension, int rowIndex) {
         PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray = new PermutationSquareCellInfo[dimension];
         for (int i = 0; i < dimension; i++) {
-            cellArray[i] = new PermutationSquareCellInfo<IntegerPermutationSquareValue>(i, rowIndex);
+            cellArray[i] = new PermutationSquareCellInfo<IntegerPermutationSquareValue>(i, rowIndex, PermutationSquareValueFactory.createIntegerListForDimension(dimension));
         }
         return cellArray;
     }
@@ -58,12 +59,42 @@ public class PermutationSquareLineInfoTestUtil {
     /**
      * @param indexValueArray of form { {columnIndex, rowIndex, intValue} , ...}
      */
-    public static List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> createChangeInfoList(int[][] indexValueArray) {
+    public static List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> createChangeInfoList(int dimension, int[][] indexValueArray) {
         List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList = new ArrayList<>();
         for (int i = 0; i < indexValueArray.length; i++) {
             int[] values = indexValueArray[i];
-            changeInfoList.add(new PermutationSquareCellInfo(values[0], values[1], PermutationSquareValueFactory.createIntegerPermutationSquareValue(values[2])));
+            changeInfoList.add(new PermutationSquareCellInfo(values[0], values[1],
+                    PermutationSquareValueFactory.createIntegerListForDimension(dimension),
+                    PermutationSquareValueFactory.createIntegerPermutationSquareValue(values[2])));
         }
         return changeInfoList;
+    }
+
+    public static void assertCellContainsValuesMap(PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray,
+                                                   Map<Integer, List<Integer>> cellArrayPossibleValueMap) {
+        for (Map.Entry<Integer, List<Integer>> entry : cellArrayPossibleValueMap.entrySet()) {
+            assertCellContainsValues(cellArray[entry.getKey()], PermutationSquareValueFactory.createIntegerValueList(entry.getValue()));
+        }
+    }
+
+    public static void assertLineIndexValuesMap(PermutationSquareLineInfo lineInfo,
+                                                   Map<IntegerPermutationSquareValue, List<Integer>> cellArrayPossibleValueMap) {
+        for (Map.Entry<IntegerPermutationSquareValue, List<Integer>> entry : cellArrayPossibleValueMap.entrySet()) {
+           Assert.assertEquals(true, lineInfo.getIndicesOfValue(entry.getKey()).containsAll(entry.getValue()));
+        }
+    }
+
+    public static void assertCellContainsValues(PermutationSquareCellInfo<IntegerPermutationSquareValue> cellArray,
+                                                 List<IntegerPermutationSquareValue> possibleValues) {
+        Assert.assertEquals(true, cellArray.getPossibleValues().containsAll(possibleValues));
+    }
+
+    public static Map<PermutationSquareCellInfo<IntegerPermutationSquareValue>, List<IntegerPermutationSquareValue>> createExpectedPossibleValues(
+            PermutationSquareCellInfo<IntegerPermutationSquareValue>[] cellArray, Map<Integer, List<Integer>> possibleValueMap) {
+        Map<PermutationSquareCellInfo<IntegerPermutationSquareValue>, List<IntegerPermutationSquareValue>> expectedPossibleValues = new HashMap<>();
+        for (Map.Entry<Integer, List<Integer>> entry : possibleValueMap.entrySet()) {
+            expectedPossibleValues.put(cellArray[entry.getKey()], PermutationSquareValueFactory.createIntegerValueList(entry.getValue()));
+        }
+        return expectedPossibleValues;
     }
 }

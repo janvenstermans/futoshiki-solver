@@ -1,6 +1,7 @@
 package janvenstermans.puzzlesolver.permutationsquare;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,12 +21,12 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
         if (possibleValueList == null || possibleValueList.size() < 1) {
             throw new IllegalArgumentException("possibleValueList must be non empty string");
         }
-        this.possibleValueList = possibleValueList;
+        this.possibleValueList = Collections.unmodifiableList(possibleValueList);
         valueContainersArray = new PermutationSquareCellInfo[getPossibleValueCount()][];
         for (int i = 0; i < getPossibleValueCount(); i++) {
             valueContainersArray[i] = new PermutationSquareCellInfo[getPossibleValueCount()];
             for (int j = 0; j < getPossibleValueCount(); j++) {
-                valueContainersArray[i][j] = new PermutationSquareCellInfo<PermutationSquareValue>(i, j);
+                valueContainersArray[i][j] = new PermutationSquareCellInfo<PermutationSquareValue>(i, j, possibleValueList);
             }
         }
 

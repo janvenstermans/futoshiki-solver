@@ -16,10 +16,11 @@ public class PermutationSquareImplDim2Test {
     @Test
     public void testName() throws Exception {
         PermutationSquare<IntegerPermutationSquareValue> permutationSquare
-                = new PermutationSquareImpl<IntegerPermutationSquareValue>(PermutationSquareValueFactory.createIntegerList(2));
+                = new PermutationSquareImpl<IntegerPermutationSquareValue>(PermutationSquareValueFactory.createIntegerListForDimension(2));
 
         List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList = new ArrayList<>();
-        changeInfoList.add(new PermutationSquareCellInfo(0,0, PermutationSquareValueFactory.createIntegerPermutationSquareValue(1)));
+        changeInfoList.add(new PermutationSquareCellInfo(0,0, PermutationSquareValueFactory.createIntegerListForDimension(2),
+                PermutationSquareValueFactory.createIntegerPermutationSquareValue(1)));
 
         permutationSquare.changeValues(changeInfoList);
 

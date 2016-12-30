@@ -1,5 +1,9 @@
 package janvenstermans.puzzlesolver.permutationsquare;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Contains info of a cell in the {@link PermutationSquare}.
  * @author Jan Venstermans
@@ -9,13 +13,16 @@ public class PermutationSquareCellInfo<PermutationSquareValue>  {
     private final int columnIndex;
     private final int rowIndex;
     private PermutationSquareValue value;
+    private List<PermutationSquareValue> possibleValueList = new ArrayList<PermutationSquareValue>();
 
-    public PermutationSquareCellInfo(int columnIndex, int rowIndex) {
-        this(columnIndex, rowIndex, null);
+    public PermutationSquareCellInfo(int columnIndex, int rowIndex, List<PermutationSquareValue> possibleValueList) {
+        this(columnIndex, rowIndex, possibleValueList, null);
     }
-    public PermutationSquareCellInfo(int columnIndex, int rowIndex, PermutationSquareValue value) {
+
+    public PermutationSquareCellInfo(int columnIndex, int rowIndex, List<PermutationSquareValue> possibleValueList, PermutationSquareValue value) {
         this.columnIndex = columnIndex;
         this.rowIndex = rowIndex;
+        this.possibleValueList.addAll(possibleValueList);
         setValue(value);
     }
 
@@ -37,9 +44,13 @@ public class PermutationSquareCellInfo<PermutationSquareValue>  {
         if (this.value == null) {
             if (!isValue) {
                 return false;
-            } else {
+            } else if (possibleValueList.contains(value)) {
                 this.value = value;
+                possibleValueList.clear();
+                possibleValueList.add(this.value);
                 return true;
+            } else {
+                throw new IllegalArgumentException(String.format("Value %s cannot be set, is not in possibleValueList %s.", value, possibleValueList));
             }
         }
         if (!isValue) {
@@ -53,5 +64,9 @@ public class PermutationSquareCellInfo<PermutationSquareValue>  {
 
     public PermutationSquareValue getValue() {
         return value;
+    }
+
+    public List<PermutationSquareValue> getPossibleValues() {
+        return Collections.unmodifiableList(possibleValueList);
     }
 }

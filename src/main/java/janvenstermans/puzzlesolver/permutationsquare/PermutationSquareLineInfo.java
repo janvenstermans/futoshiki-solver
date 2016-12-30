@@ -14,6 +14,8 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
 
     private final PermutationSquareCellInfo<PermutationSquareValue>[] cellArray;
 
+    private final List<PermutationSquareValue> possibleValueList;
+
     /**
      * Possible values.
      */
@@ -25,6 +27,7 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
         this.index = index;
         this.lineType = lineType;
         this.cellArray = cellArray;
+        this.possibleValueList = possibleValueList;
         for (PermutationSquareValue permutationSquareValue : possibleValueList) {
             possibleValueMap.put(permutationSquareValue, createIndexList(possibleValueList.size()));
         }
@@ -50,6 +53,20 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
         }
         return extractNewChanges();
     }
+
+    public List<Integer> getIndicesOfValue(PermutationSquareValue value) {
+        if (possibleValueMap.containsKey(value)) {
+            return Collections.unmodifiableList(possibleValueMap.get(value));
+        }
+        for (PermutationSquareCellInfo<PermutationSquareValue> cellInfo : cellArray) {
+            if (value.equals(cellInfo.getValue())) {
+                return Collections.singletonList(getCellIndex(cellInfo));
+            }
+        }
+        return null;
+    }
+
+    // helper methods
 
     private List<Integer> createIndexList(int count) {
         List<Integer> integerList = new ArrayList<>();
@@ -88,7 +105,7 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
                         = createPermutationSquareCellInfo(entry.getValue().get(0));
                 cellInfo.setValue(entry.getKey());
                 newChanges.add(cellInfo);
-        }
+            }
         }
         return newChanges;
     }
@@ -96,11 +113,15 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
     private PermutationSquareCellInfo<PermutationSquareValue> createPermutationSquareCellInfo(int cellIndex) {
         switch (lineType) {
             case ROW:
-                return new PermutationSquareCellInfo<PermutationSquareValue>(cellIndex, index);
+                return new PermutationSquareCellInfo<PermutationSquareValue>(cellIndex, index, possibleValueList);
             case COLUMN:
-                return new PermutationSquareCellInfo<PermutationSquareValue>(index, cellIndex);
+                return new PermutationSquareCellInfo<PermutationSquareValue>(index, cellIndex, possibleValueList);
         }
         return null;
+    }
+
+    private PermutationSquareCellInfo<PermutationSquareValue> getCellOfIndex(int index) {
+        return cellArray[index];
     }
 
     private int getCellIndex(PermutationSquareCellInfo<PermutationSquareValue> cellInfo) {

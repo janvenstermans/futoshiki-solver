@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class PermutationSquareValueFactory {
 
-    public static final List<IntegerPermutationSquareValue> createIntegerList(int dimension) {
+    public static final List<IntegerPermutationSquareValue> createIntegerListForDimension(int dimension) {
         if (dimension < 1) {
             throw new IllegalArgumentException("dimension must be larger than 0");
         }
@@ -24,5 +24,13 @@ public class PermutationSquareValueFactory {
 
     public static final IntegerPermutationSquareValue createIntegerPermutationSquareValue(int integer) {
         return new IntegerPermutationSquareValue(integer);
+    }
+
+    public static List<IntegerPermutationSquareValue> createIntegerValueList(List<Integer> integerList) {
+        List<IntegerPermutationSquareValue> valueList = new ArrayList<>();
+        for (Integer integer : integerList) {
+            valueList.add(PermutationSquareValueFactory.createIntegerPermutationSquareValue(integer));
+        }
+        return valueList;
     }
 }
