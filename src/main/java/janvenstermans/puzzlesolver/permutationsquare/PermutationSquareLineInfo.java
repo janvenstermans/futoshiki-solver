@@ -64,6 +64,7 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
                     entry.getValue().removeAll(solvedIndexList);
                 }
             }
+            indicesMap = getSolvedIndicesMap();
         }
         return extractNewChanges();
     }
