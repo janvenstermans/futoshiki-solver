@@ -57,9 +57,6 @@ public class PermutationSquareLineInfoTestUtil {
                 = PermutationSquareLineInfoTestUtil.createChangeInfoList(cellArray.length, indexValueArray);
         PermutationSquareLineInfoTestUtil.copyChangeInfoToCellArray(changeInfoList, cellArray);
         lineInfo.applyChange(changeInfoList);
-//        for (int i = 0; i < indexValueArray.length; i++) {
-//            cellArray[indexValueArray[i][0]].setValue(PermutationSquareValueFactory.createIntegerPermutationSquareValue(indexValueArray[i][1]));
-//        }
     }
 
     /**
@@ -102,5 +99,18 @@ public class PermutationSquareLineInfoTestUtil {
             expectedPossibleValues.put(cellArray[entry.getKey()], PermutationSquareValueFactory.createIntegerValueList(entry.getValue()));
         }
         return expectedPossibleValues;
+    }
+
+    public static void setCellPossibleValueIndicesMap(PermutationSquareLineInfo lineInfo,
+                                                      Map<Integer, List<Integer>> cellArrayPossibleValueMap) {
+        for (Map.Entry<Integer, List<Integer>> entry : cellArrayPossibleValueMap.entrySet()) {
+            setCellPossibleValueIndices(lineInfo, PermutationSquareValueFactory.createIntegerPermutationSquareValue(entry.getKey()), entry.getValue());
+        }
+    }
+
+    public static void setCellPossibleValueIndices(PermutationSquareLineInfo lineInfo,
+                                                   IntegerPermutationSquareValue integerPermutationSquareValue,
+                                                   List<Integer> possibleIndices) {
+        lineInfo.setIndicesOfValue(integerPermutationSquareValue, possibleIndices);
     }
 }

@@ -29,7 +29,7 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
         this.cellArray = cellArray;
         this.possibleValueList = possibleValueList;
         for (PermutationSquareValue permutationSquareValue : possibleValueList) {
-            possibleValueMap.put(permutationSquareValue, createIndexList(possibleValueList.size()));
+            setIndicesOfValue(permutationSquareValue, createIndexList(possibleValueList.size()));
         }
     }
 
@@ -51,7 +51,26 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
         for (Map.Entry<PermutationSquareValue, List<Integer>> entry : possibleValueMap.entrySet()) {
             entry.getValue().removeAll(filledIndices);
         }
+        int extraSolvedCount = 0;
+        Map<PermutationSquareValue, Integer> indicesMap = getSolvedIndicesMap();
+        Set<Integer> solvedIndexList = new HashSet<>();
+        while (extraSolvedCount < indicesMap.size()) {
+            extraSolvedCount = indicesMap.size();
+            for (Integer index : indicesMap.values()) {
+                solvedIndexList.add(index);
+            }
+            for (Map.Entry<PermutationSquareValue, List<Integer>> entry : possibleValueMap.entrySet()) {
+                if (!indicesMap.containsKey(entry.getKey())) {
+                    entry.getValue().removeAll(solvedIndexList);
+                }
+            }
+        }
         return extractNewChanges();
+    }
+
+    public void setIndicesOfValue(PermutationSquareValue value, List<Integer> indexList) {
+        possibleValueMap.remove(value);
+        possibleValueMap.put(value, new ArrayList<>(indexList));
     }
 
     public List<Integer> getIndicesOfValue(PermutationSquareValue value) {
@@ -94,6 +113,16 @@ public class PermutationSquareLineInfo<PermutationSquareValue> implements Permut
             }
         }
         return filledIndices;
+    }
+
+    private Map<PermutationSquareValue, Integer> getSolvedIndicesMap() {
+        Map<PermutationSquareValue, Integer> solvedIndeces = new HashMap<>();
+        for (Map.Entry<PermutationSquareValue, List<Integer>> entry : possibleValueMap.entrySet()) {
+            if (entry.getValue().size() == 1) {
+                solvedIndeces.put(entry.getKey(), entry.getValue().get(0));
+            }
+        }
+        return solvedIndeces;
     }
 
     private List<PermutationSquareCellInfo<PermutationSquareValue>> extractNewChanges() {
