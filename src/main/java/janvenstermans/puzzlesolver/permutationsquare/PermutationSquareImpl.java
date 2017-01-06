@@ -60,7 +60,8 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
             }
         }
         if (infoToChangeList.size() > 0) {
-            fireChangeToListeners(infoToChangeList);
+            List<PermutationSquareCellInfo<PermutationSquareValue>> newChangeList = fireChangeToListeners(infoToChangeList);
+            changeValues(newChangeList);
         }
     }
 
@@ -73,6 +74,11 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
     @Override
     public void registerValueChangedListener(PermutationSquareValueChangedListener<PermutationSquareValue> valueChangedListener) {
         valueChangedListenerList.add(valueChangedListener);
+    }
+
+    @Override
+    public PermutationSquareCellInfo<PermutationSquareValue> getCellInfo(int columnIndex, int rowIndex) {
+        return valueContainersArray[columnIndex][rowIndex];
     }
 
     // helper methods
@@ -93,12 +99,17 @@ public class PermutationSquareImpl<PermutationSquareValue> implements Permutatio
         }
     }
 
-    private void fireChangeToListeners(List<PermutationSquareCellInfo<PermutationSquareValue>> infoToChangeList) {
+    /**
+     *
+     * @param infoToChangeList
+     * @return newChanges
+     */
+    private  List<PermutationSquareCellInfo<PermutationSquareValue>> fireChangeToListeners(List<PermutationSquareCellInfo<PermutationSquareValue>> infoToChangeList) {
         List<PermutationSquareCellInfo<PermutationSquareValue>> newChanges = new ArrayList<>();
         for (PermutationSquareValueChangedListener<PermutationSquareValue> listener : valueChangedListenerList) {
             newChanges.addAll(listener.applyChange(infoToChangeList));
         }
-        // TODO: what to do
+        return newChanges;
     }
 
     /**

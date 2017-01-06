@@ -1,8 +1,7 @@
 package janvenstermans.puzzlesolver.permutationsquare.value;
 
-import janvenstermans.puzzlesolver.permutationsquare.PermutationSquareCellInfo;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,6 +17,24 @@ public class PermutationSquareValueFactory {
         List<IntegerPermutationSquareValue> permutationSquareValueList = new ArrayList<>();
         for (int i = 0; i < dimension; i++) {
             permutationSquareValueList.add(createIntegerPermutationSquareValue(i + 1));
+        }
+        return createIntegerListForAllButIntegers(dimension);
+    }
+
+    public static final List<IntegerPermutationSquareValue> createIntegerListForAllButIntegers(int dimension, int ... values) {
+        if (dimension < 1) {
+            throw new IllegalArgumentException("dimension must be larger than 0");
+        }
+        List<Integer> possibleValues = new ArrayList<>();
+        for (int i = 1; i <= dimension; i++) {
+            possibleValues.add(i);
+        }
+        if (values != null) {
+            possibleValues.removeAll(Arrays.asList(values));
+        }
+        List<IntegerPermutationSquareValue> permutationSquareValueList = new ArrayList<>();
+        for (int value : possibleValues) {
+            permutationSquareValueList.add(createIntegerPermutationSquareValue(value));
         }
         return permutationSquareValueList;
     }

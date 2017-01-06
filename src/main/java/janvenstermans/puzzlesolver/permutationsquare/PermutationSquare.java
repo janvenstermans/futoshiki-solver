@@ -12,4 +12,6 @@ public interface PermutationSquare<PermutationSquareValue>  {
     PermutationSquareValue getValue(int columnIndex, int rowIndex);
 
     void registerValueChangedListener(PermutationSquareValueChangedListener<PermutationSquareValue> valueChangedListener);
+
+    PermutationSquareCellInfo<PermutationSquareValue> getCellInfo(int columnIndex, int rowIndex);
 }

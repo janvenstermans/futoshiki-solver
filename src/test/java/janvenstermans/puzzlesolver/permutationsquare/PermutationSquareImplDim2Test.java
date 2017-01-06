@@ -14,12 +14,13 @@ import java.util.List;
 public class PermutationSquareImplDim2Test {
 
     @Test
-    public void testName() throws Exception {
+    public void test2Dim() throws Exception {
+        int dimension = 2;
         PermutationSquare<IntegerPermutationSquareValue> permutationSquare
-                = new PermutationSquareImpl<IntegerPermutationSquareValue>(PermutationSquareValueFactory.createIntegerListForDimension(2));
+                = new PermutationSquareImpl<IntegerPermutationSquareValue>(PermutationSquareValueFactory.createIntegerListForDimension(dimension));
 
         List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> changeInfoList = new ArrayList<>();
-        changeInfoList.add(new PermutationSquareCellInfo(0,0, PermutationSquareValueFactory.createIntegerListForDimension(2),
+        changeInfoList.add(new PermutationSquareCellInfo(0,0, PermutationSquareValueFactory.createIntegerListForDimension(dimension),
                 PermutationSquareValueFactory.createIntegerPermutationSquareValue(1)));
 
         permutationSquare.changeValues(changeInfoList);

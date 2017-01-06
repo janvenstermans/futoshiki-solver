@@ -27,6 +27,22 @@ public class PermutationSquareLineInfoTestUtil {
         }
     }
 
+    public static void assertCellInfoList(PermutationSquare<IntegerPermutationSquareValue> permutationSquare, List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> solvedList) {
+        for (PermutationSquareCellInfo<IntegerPermutationSquareValue> solvedValue : solvedList) {
+            PermutationSquareCellInfo cellInfo = permutationSquare.getCellInfo(solvedValue.getColumnIndex(), solvedValue.getRowIndex());
+            Assert.assertEquals(cellInfo.getValue(), solvedValue.getValue());
+        }
+    }
+
+    public static void assertCellListUnsolved(PermutationSquare<IntegerPermutationSquareValue> permutationSquare,
+                                              List<PermutationSquareCellInfo<IntegerPermutationSquareValue>> unsolvedList) {
+        for (PermutationSquareCellInfo<IntegerPermutationSquareValue> unsolvedValue : unsolvedList) {
+            PermutationSquareCellInfo cellInfo = permutationSquare.getCellInfo(unsolvedValue.getColumnIndex(), unsolvedValue.getRowIndex());
+            Assert.assertTrue(cellInfo.getPossibleValues().containsAll(unsolvedValue.getPossibleValues()));
+        }
+    }
+
+
     public static void assertCellInfo(PermutationSquareCellInfo resultItem, int columnIndex, int rowIndex, PermutationSquareValue value) {
         Assert.assertEquals(columnIndex, resultItem.getColumnIndex());
         Assert.assertEquals(rowIndex, resultItem.getRowIndex());
